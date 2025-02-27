@@ -1,12 +1,9 @@
-import { useState } from "react";
-import Square from "./Square";
+import React from "react";
+import { Square } from "./Square";
 
-const Board = () => {
-  const [xIsNext, setXIsNext] = useState(true);
-  const [squares, setSquares] = useState(Array(9).fill(null));
-
+function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
-    if (squares[i] || calculateWinner(squares)) {
+    if (calculateWinner(squares) || squares[i]) {
       return;
     }
     const nextSquares = squares.slice();
@@ -15,9 +12,7 @@ const Board = () => {
     } else {
       nextSquares[i] = "O";
     }
-
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
 
   const winner = calculateWinner(squares);
@@ -30,6 +25,9 @@ const Board = () => {
 
   return (
     <>
+      <div className="title">
+        <h1>tic tac toe</h1>
+      </div>
       <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
@@ -48,7 +46,7 @@ const Board = () => {
       </div>
     </>
   );
-};
+}
 
 function calculateWinner(squares) {
   const lines = [
@@ -70,4 +68,4 @@ function calculateWinner(squares) {
   return null;
 }
 
-export default Board;
+export { Board };
